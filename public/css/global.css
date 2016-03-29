@@ -1,0 +1,8 @@
+@import url(glyphicons-regular.css);
+
+body {
+    opacity: 0;
+    background-color: #ffffff;
+    transition: opacity .4s;
+    -webkit-transition: opacity .4s;
+}

@@ -6,3 +6,7 @@ body {
     transition: opacity .4s;
     -webkit-transition: opacity .4s;
 }
+
+table {
+    background-color: #ffffff;
+}

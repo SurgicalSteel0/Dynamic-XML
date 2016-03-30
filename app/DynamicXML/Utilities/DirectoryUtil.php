@@ -18,7 +18,35 @@ class DirectoryUtil {
             if ($directoryHandle = opendir($directory)) {
                 while ((($file = readdir($directoryHandle)) !== false)) {
                     if (!in_array($file, array(".", ".."))) {
-                        array_push($files, $file);
+                        if (!is_dir($directory . "/" . $file)) {
+                            array_push($files, $file);
+                        }
+                    }
+                }
+                closedir($directoryHandle);
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Returns all directories in the given directory.
+     * 
+     * @param string $directory
+     * @return array
+     */
+    public static function getAllDirectoriesInDirectory($directory) {
+
+        $files = array();
+
+        if (is_dir($directory)) {
+            if ($directoryHandle = opendir($directory)) {
+                while ((($file = readdir($directoryHandle)) !== false)) {
+                    if (!in_array($file, array(".", ".."))) {
+                        if (is_dir($directory . "/" . $file)) {
+                            array_push($files, $file);
+                        }
                     }
                 }
                 closedir($directoryHandle);
@@ -51,7 +79,30 @@ class DirectoryUtil {
                 unlink($file);
             }
         }
-        rmdir($directory);
+        return rmdir($directory);
+    }
+
+    /**
+     * Removes all files in the given directory except for the given filetypes.
+     * 
+     * @param array $fileTypes
+     * @param string $directory
+     */
+    public static function removeAllFilesInDirectoryExceptFor(array $fileTypes, $directory) {
+
+        if (is_dir($directory)) {
+            if ($directoryHandle = opendir($directory)) {
+                while ((($file = readdir($directoryHandle)) !== false)) {
+                    if (!in_array($file, array(".", ".."))) {
+                        $pathParts = pathinfo($file);
+                        if (!in_array($pathParts["extension"], $fileTypes)) {
+                            unlink($directory . "/" . $file);
+                        }
+                    }
+                }
+                closedir($directoryHandle);
+            }
+        }
     }
 
 }

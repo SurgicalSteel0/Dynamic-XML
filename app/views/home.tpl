@@ -79,7 +79,7 @@
                         </div>
                         <div class="panel-body">
 
-                            <form role="form" action="../app/forms/upload-zip-file.php" method="post" enctype="multipart/form-data">
+                            <form id="uploadZipForm" role="form" action="../app/forms/upload-zip-file.php" method="post" enctype="multipart/form-data">
 
                                 <label>Select a zip file to upload:</label>
                                 <div class="row">
@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
                                     <div class="col-xs-3 text-right">
-                                        <button type="submit" class="btn btn-primary btn-block">
+                                        <button type="submit" class="btn btn-primary btn-block" id="uploadZipBtn">
                                             <span class="glyphicon glyphicon-cloud-upload"></span> Upload
                                         </button>
                                     </div>
@@ -120,11 +120,11 @@
                                             <tr>
                                                 <td>{$zipFile}</td>
                                                 <td>{$zipFile->size}</td>
-                                                <td>20</td>
+                                                <td>{$zipFile->numberOfXMLs}</td>
                                                 <td class="text-center" style="vertical-align: middle;">
-                                                    <form role="form" action="../app/forms/remove-zip-file.php" method="post">
+                                                    <form class="remove-zip-form" role="form" action="../app/forms/remove-zip-file.php" method="post">
                                                         <input type="hidden" name="zipFile" value="{$zipFile}" />
-                                                        <button type="submit" class="btn btn-danger btn-xs">
+                                                        <button type="submit" class="btn btn-danger btn-xs remove-zip-btn">
                                                             <span class="glyphicon glyphicon-trash"></span> Remove
                                                         </button>
                                                     </form>
@@ -134,6 +134,13 @@
                                     </tbody>
                                 </table>                                
                             </div>
+
+                            <form id="processXMLFilesForm" role="form" action="../app/forms/process-xml-files.php" method="post">                                
+                                <button id="processXMLFilesBtn" type="submit" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-refresh"></span> Process XML Files
+                                </button>
+                            </form>
+
                         </div>
                     </div>
                 </div>

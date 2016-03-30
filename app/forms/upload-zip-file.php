@@ -17,8 +17,11 @@ $uploadUtil->upload($_FILES["zip-file"]);
 
 if ($uploadUtil->successful) {
 
-    DirectoryUtil::createDirectory("../extracted/" . FileUtil::getBaseName($uploadUtil->uploadedFile));
-    FileUtil::extractZipFile($uploadUtil->uploadedFile, "../extracted/" . FileUtil::getBaseName($uploadUtil->uploadedFile));
+    $directory = "../extracted/" . FileUtil::getBaseName($uploadUtil->uploadedFile);
+    
+    DirectoryUtil::createDirectory($directory);
+    FileUtil::extractZipFile($uploadUtil->uploadedFile, $directory);
+    DirectoryUtil::removeAllFilesInDirectoryExceptFor(array("xml", "XML"), $directory);
 
     $message = array(
         "type" => "success",

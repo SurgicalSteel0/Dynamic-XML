@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
         <link rel="stylesheet" href="css/bootstrap.css">
-        <link rel="stylesheet" href="css/bootstrap-theme.css">        
+        <link rel="stylesheet" href="css/bootstrap-theme.css">
         <link rel="stylesheet" href="css/dataTables.bootstrap.min.css">
         <link rel="stylesheet" href="css/jquery-ui.min.css">
         <link rel="stylesheet" href="css/jquery-ui.theme.min.css">
@@ -16,13 +16,13 @@
         <script src="js/jquery.min.js"></script>
         <script src="js/jquery-ui.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script src="js/validator.min.js"></script>        
-        <script src="js/backstretch.min.js"></script>        
+        <script src="js/validator.min.js"></script>
+        <script src="js/backstretch.min.js"></script>
         <script src="js/jquery.dataTables.min.js"></script>
         <script src="js/dataTables.buttons.min.js"></script>
         <script src="js/jszip.min.js"></script>
         <script src="js/buttons.html5.min.js"></script>
-        <script src="js/dataTables.bootstrap.min.js"></script>        
+        <script src="js/dataTables.bootstrap.min.js"></script>
         <script src="js/jasny-bootstrap.min.js"></script>
         <script src="js/global.js"></script>
 
@@ -33,6 +33,12 @@
 
         {literal}
             <script>
+
+                $(document).ready(function() {
+
+                    $("#zipFilesTable").dataTable();
+
+                });
 
             </script>
         {/literal}
@@ -64,22 +70,24 @@
                             </div>
                         </div>
                         <div class="panel-body">
-                            <form role="form" >
-                                <label>Select a zip file to upload:</label>
-                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                    <div class="form-control" data-trigger="fileinput">
-                                        <i class="glyphicon glyphicon-file fileinput-exists"></i>
-                                        <span class="fileinput-filename"></span>
+                            
+                                <form role="form" >
+                                    <label>Select a zip file to upload:</label>
+                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                        <div class="form-control" data-trigger="fileinput">
+                                            <i class="glyphicon glyphicon-file fileinput-exists"></i>
+                                            <span class="fileinput-filename"></span>
+                                        </div>
+                                        <span class="input-group-addon btn btn-default btn-file">
+                                            <span class="fileinput-new">Select a zip file</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="file" name="..." required>
+                                        </span>
+                                        <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
                                     </div>
-                                    <span class="input-group-addon btn btn-default btn-file">
-                                        <span class="fileinput-new">Select a zip file</span>
-                                        <span class="fileinput-exists">Change</span>
-                                        <input type="file" name="..." required>
-                                    </span>
-                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-                                </div>
-                            </form>                            
-                            <table id="salesRepTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                                </form>
+                            <div class="well">
+                            <table id="zipFilesTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>File Name</th>
@@ -88,9 +96,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+
                                 </tbody>
                             </table>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -21,6 +21,8 @@ $(document).ready(function() {
      */
     registerLoadingButton($('#uploadZipBtn'), $('#uploadZipForm'));
     registerLoadingButton($('#processXMLFilesBtn'), $('#processXMLFilesForm'));
+    registerLoadingButton($('#removeXMLFilesBtn'), $('#removeXMLFilesForm'));
+    registerLoadingButton($('#removeAllCSVsBtn'), $('#removeAllCSVsForm'));
 
 });
 

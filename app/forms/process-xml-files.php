@@ -1,5 +1,9 @@
 <?php
 
+ini_set('xdebug.var_display_max_depth', 5);
+ini_set('xdebug.var_display_max_children', 256);
+ini_set('xdebug.var_display_max_data', 1024);
+
 use DynamicXML\Sessions\Session;
 use DynamicXML\Utilities\DirectoryUtil;
 use DynamicXML\Files\XMLFile;
@@ -22,28 +26,73 @@ foreach ($xmlDirectories as $xmlDirectory) {
     }
 }
 
+if (count($xmlFilesToParse) === 0) {
+    $message = array(
+        "type" => "warning",
+        "text" => "<strong>No Files</strong><br/>You do not have any XML files to process."
+    );
+
+    $session->register("message", $message);
+    header("Location: ../../public/home.php");
+    die();
+}
+
 /*
  * Second, lets form "csv rows" that contain the data we want.
+ * 
+ * We want to remove any commas in the data so it doesn't mess up when we right
+ * it to the csv file.
+ *
+ * If the quantity is divisible by 20 and is greater than 20, we want to break
+ * that row up into multiple rows.
  */
 $csvRows = array();
 foreach ($xmlFilesToParse as $xmlFileToParse) {
 
     if (count($xmlFileToParse->content->artInfo) === 3) {
-        $csvRow = array(
-            "orderNumber" => (string) $xmlFileToParse->content->Header->hea_Jobno,
-            "quantity" => (int) $xmlFileToParse->content->Header->hea_Quantity,
-            "name" => (string) $xmlFileToParse->content->artInfo[0]->artInf_Text,
-            "street" => (string) $xmlFileToParse->content->artInfo[1]->artInf_Text,
-            "state" => (string) $xmlFileToParse->content->artInfo[2]->artInf_Text
-        );
 
-        array_push($csvRows, $csvRow);
+        $namePieces = explode(' ', $xmlFileToParse->content->artInfo[0]->artInf_Text);
+        $sortBy = array_pop($namePieces);
+        $name = str_replace(",", "", $xmlFileToParse->content->artInfo[0]->artInf_Text);
+        $street = str_replace(",", "", $xmlFileToParse->content->artInfo[1]->artInf_Text);
+        $state = str_replace(",", "", $xmlFileToParse->content->artInfo[2]->artInf_Text);
+        $quantity = (int) $xmlFileToParse->content->Header->hea_Quantity;
+
+        if (($quantity % 20) === 0) {
+            $timesToRepeat = $quantity / 20;
+
+            for ($i = 0; $i < $timesToRepeat; $i++) {
+                $csvRow = array(
+                    "orderNumber" => (string) $xmlFileToParse->content->Header->hea_Jobno,
+                    "quantity" => 20,
+                    "actualQuantity" => $quantity,
+                    "sortBy" => (string) $sortBy,
+                    "name" => (string) $name,
+                    "street" => (string) $street,
+                    "state" => (string) $state
+                );
+
+                array_push($csvRows, $csvRow);
+            }
+        } else {
+            $csvRow = array(
+                "orderNumber" => (string) $xmlFileToParse->content->Header->hea_Jobno,
+                "quantity" => (int) $xmlFileToParse->content->Header->hea_Quantity,
+                "actualQuantity" => $quantity,
+                "sortBy" => (string) $sortBy,
+                "name" => (string) $name,
+                "street" => (string) $street,
+                "state" => (string) $state
+            );
+
+            array_push($csvRows, $csvRow);
+        }
     }
 }
 
 /*
  * Third, let's group our rows by the order number and create a CSV file object
- * for each group. 
+ * for each group.
  */
 $csvFiles = array(new CSVFile());
 foreach ($csvRows as $csvRow) {
@@ -64,22 +113,45 @@ foreach ($csvRows as $csvRow) {
 }
 array_shift($csvFiles); // We need to remove our blank CSVFile object we started with
 
+/*
+ * Forth, we need to sort the contents of each csv file by the last name or by
+ * the "sortBy" column above. Basically what we are doing here is grabing the
+ * csv file content, sorting it, clearing the csv file and then reassigning
+ * the sorted data back to it.
+ */
 foreach ($csvFiles as $csvFile) {
-    var_dump($csvFile->);
+    $csvFileContents = $csvFile->getCSVRows();
+    array_sort_by_column($csvFileContents, 'sortBy');
+    $csvFile->clearCSVRows();
+    $csvFile->setCSVRows($csvFileContents);
+    $csvFile->convertCSVRowsToList();
+    $csvFile->save();
 }
 
-//if ($uploadUtil->successful) {
-//
-//    $message = array(
-//        "type" => "success",
-//        "text" => "<strong>File Uploaded</strong><br/>Your zip file has been successfully uploaded."
-//    );
-//} else {
-//    $message = array(
-//        "type" => "danger",
-//        "text" => "<strong>Upload Failed</strong><br/>" . $uploadUtil->errors[0]
-//    );
-//}
-//
-//$session->register("message", $message);
-//header("Location: ../../public/home.php");
+// var_dump($csvFiles);
+
+$message = array(
+    "type" => "success",
+    "text" => "<strong>Files Processed</strong><br/>Your files have been processed successfully."
+);
+
+$session->register("message", $message);
+header("Location: ../../public/home.php");
+die();
+
+/**
+ * Sorts a multi-dimensional array by a column.
+ * http://stackoverflow.com/questions/2699086/sort-multi-dimensional-array-by-value
+ *
+ * @param array $arr
+ * @param string $col
+ * @param type $dir
+ */
+function array_sort_by_column(&$arr, $col, $dir = SORT_ASC) {
+    $sort_col = array();
+    foreach ($arr as $key => $row) {
+        $sort_col[$key] = $row[$col];
+    }
+
+    array_multisort($sort_col, $dir, $arr);
+}

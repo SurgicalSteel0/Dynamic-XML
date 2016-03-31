@@ -14,13 +14,18 @@ class CSVFile {
      *
      * @var array
      */
-    protected $list;
+    protected $list = array("Name, Street, State");
 
     /**
      *
      * @var array
      */
     protected $csvRows = array();
+
+    public function clearCSVRows() {
+        unset($this->csvRows);
+        $this->csvRows = array();
+    }
 
     /**
      * 
@@ -31,7 +36,9 @@ class CSVFile {
     }
 
     public function convertCSVRowsToList() {
-        
+        foreach ($this->csvRows as $csvRow) {
+            array_push($this->list, "{$csvRow['name']}, {$csvRow['street']}, {$csvRow['state']}");
+        }
     }
 
     /**
@@ -39,7 +46,7 @@ class CSVFile {
      *
      */
     public function save() {
-        $file = fopen("../app/processed" . $this->orderNumber . "-" . date("F j, Y") . ".csv", "w");
+        $file = fopen("../../app/processed/" . $this->orderNumber . "-" . date("F j, Y") . ".csv", "w");
         foreach ($this->list as $line) {
             fputcsv($file, explode(',', $line));
         }
@@ -56,6 +63,10 @@ class CSVFile {
         return $this->list;
     }
 
+    public function getCSVRows() {
+        return $this->csvRows;
+    }
+
     // Setters
 
     public function setOrderNumber($orderNumber) {
@@ -66,4 +77,8 @@ class CSVFile {
         $this->list = $list;
     }
 
+    public function setCSVRows($csvRows) {
+        $this->csvRows = $csvRows;
+    }
+    
 }

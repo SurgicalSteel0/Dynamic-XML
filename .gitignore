@@ -1,5 +1,7 @@
 app/uploads
 app/extracted
+app/processed
+app/forms/*.zip
 public/templates_c
 vendor
 composer.phar

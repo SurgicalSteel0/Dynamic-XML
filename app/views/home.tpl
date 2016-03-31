@@ -37,6 +37,7 @@
                 $(document).ready(function() {
 
                     $("#zipFilesTable").dataTable({
+                        "pagingType": "simple",
                         "language": {
                             "lengthMenu": "Display _MENU_ zip files per page",
                             "zeroRecords": "There are no zip files.",
@@ -46,7 +47,23 @@
                         }
                     });
 
+                    $("#csvFilesTable").dataTable({
+                        "pagingType": "simple",
+                        "language": {
+                            "lengthMenu": "Display _MENU_ csv files per page",
+                            "zeroRecords": "There are no csv files.",
+                            "info": "Showing page _PAGE_ of _PAGES_",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "searchPlaceholder": "Search for anything"
+                        }
+                    });
+
                 });
+
+                function removeCSV(csvFile) {
+                    $("#removeCSVInput").val(csvFile);
+                    $("#removeCSVForm").submit();
+                }
 
             </script>
         {/literal}
@@ -132,12 +149,18 @@
                                             </tr>
                                         {/foreach}
                                     </tbody>
-                                </table>                                
+                                </table>
                             </div>
 
-                            <form id="processXMLFilesForm" role="form" action="../app/forms/process-xml-files.php" method="post">                                
+                            <form class="pull-left" id="processXMLFilesForm" role="form" action="../app/forms/process-xml-files.php" method="post">
                                 <button id="processXMLFilesBtn" type="submit" class="btn btn-success">
-                                    <span class="glyphicon glyphicon-refresh"></span> Process XML Files
+                                    <span class="glyphicon glyphicon-refresh"></span> Process ZIP Files
+                                </button>
+                            </form>
+
+                            <form class="pull-right" id="removeXMLFilesForm" role="form" action="../app/forms/remove-xml-files.php" method="post">
+                                <button id="removeXMLFilesBtn" type="submit" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove ZIP Files
                                 </button>
                             </form>
 
@@ -156,18 +179,50 @@
                             </div>
                         </div>
                         <div class="panel-body">
-                            <table id="csvFilesTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>File Name</th>
-                                        <th>Size</th>
-                                        <th>Number of XML's</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                            <div class="well">
+                                <table id="csvFilesTable" class="table table-striped table-bordered table-hover" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Size</th>
+                                            <th>Order Number</th>
+                                            <th>Options</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {foreach from=$csvFiles item=csvFile}
+                                            <tr>
+                                                <td>{$csvFile}</td>
+                                                <td>{$csvFile->size}</td>
+                                                <td>{$csvFile->orderNumber}</td>
+                                                <td class="text-center" style="vertical-align: middle;">
+                                                    <div class="btn-group">
+                                                        <button onclick="removeCSV('{$csvFile}')" type="button" class="btn btn-danger btn-xs remove-csv-btn">
+                                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                                        </button>
+                                                        <a href="../app/processed/{$csvFile}" class="btn btn-success btn-xs download-csv-btn" download>
+                                                            <span class="glyphicon glyphicon-cloud-download"></span> Download
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {/foreach}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                </tbody>
-                            </table>
+                            <form class="pull-left" id="downloadAllCSVsForm" role="form" action="../app/forms/download-all-csvs.php" method="post">
+                                <button id="downloadAllCSVsBtn" type="submit" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-cloud-download"></span> Download CSV Files
+                                </button>
+                            </form>
+
+                            <form class="pull-right" id="removeAllCSVsForm" role="form" action="../app/forms/remove-all-csvs.php" method="post">
+                                <button id="removeAllCSVsBtn" type="submit" class="btn btn-danger">
+                                    <span class="glyphicon glyphicon-trash"></span> Remove CSV Files
+                                </button>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -175,6 +230,14 @@
             </div>
 
         </div>
+
+        <form id="removeCSVForm" role="form" action="../app/forms/remove-csv-file.php" method="post">
+            <input id="removeCSVInput" type="hidden" name="csvFile" value="" />
+        </form>
+
+        <form id="downloadCSVForm" role="form" action="../app/forms/download-csv-file.php" method="post">
+            <input id="downloadCSVInput" type="hidden" name="csvFile" value="" />
+        </form>
 
     </body>
 </html>

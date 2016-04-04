@@ -239,5 +239,26 @@
             <input id="downloadCSVInput" type="hidden" name="csvFile" value="" />
         </form>
 
+        <div id="zipFilesHelpModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Zip &amp; XML File Directions</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            First, send all of the XML files you wish to process to a zip folder. Then click on "Select a zip file" and find your corresponding zip file. Next click on upload.
+                            Your zip file will be uploaded to the server and will be shown in the table underneath the upload dialog.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>                            
+
     </body>
 </html>

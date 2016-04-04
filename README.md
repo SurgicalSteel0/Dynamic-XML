@@ -2,7 +2,7 @@
 
 Dynamic XML was developed for National Recognition Products and is used internally for processing return address label orders.
 
-The application is currently hosted at [mkt.nrpgrad.com/dyno-xml](http://mkt.nrpgrad.com/dyno-xml).
+The application is currently hosted at [mkt.nrpgrad.com/dynamic-xml](http://mkt.nrpgrad.com/dynamic-xml).
 
 ## Credits
 Developed by Denis R. Priebe.

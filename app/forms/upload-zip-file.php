@@ -12,7 +12,7 @@ $session = new Session();
 $uploadUtil = new UploadUtil();
 $uploadUtil->setAllowedTypes("zip");
 $uploadUtil->setDirectory("../uploads");
-$uploadUtil->setMaxFileSize("3000000"); // 3 MB
+$uploadUtil->setMaxFileSize("5000000"); // 3 MB
 $uploadUtil->upload($_FILES["zip-file"]);
 
 if ($uploadUtil->successful) {

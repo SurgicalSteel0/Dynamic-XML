@@ -4,7 +4,7 @@ namespace DynamicXML\Utilities;
 
 class UploadUtil {
 
-    private $maxFileSize = 500000;
+    private $maxFileSize = 5000000;
     private $allowedTypes = array();
     private $uniqueId = "";
     private $dir;

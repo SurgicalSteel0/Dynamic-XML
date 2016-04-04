@@ -22,7 +22,7 @@
             <ul class="nav navbar-nav navbar-right">
                 
                 <li>
-                    <a class="new-page" href="logout.php"><span class="glyphicon glyphicon-cog"></span> Settings</a>
+                    <a class="new-page" href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a>
                 </li>
             </ul>
         </div>

@@ -1,10 +1,26 @@
 <?php
 
+use DynamicXML\Sessions\Session;
+use DynamicXML\Utilities\DirectoryUtil;
+
 require_once "../../start.php";
+
+$session = new Session();
 
 $the_folder = '../../app/processed';
 $zip_file_name = 'csv_files.zip';
 
+$csvFiles = DirectoryUtil::getAllFilesInDirectory($the_folder);
+if (count($csvFiles) === 0) {
+    $message = array(
+        "type" => "warning",
+        "text" => "<strong>No Files</strong><br/>You do not have any CSV files to download."
+    );
+
+    $session->register("message", $message);
+    header("Location: ../../public/home.php");
+    die();
+}
 
 $download_file = true;
 
@@ -63,3 +79,5 @@ if ($download_file) {
     header("Content-Length: " . filesize($zip_file_name));
     readfile($zip_file_name);
 }
+
+unlink("csv_files.zip");

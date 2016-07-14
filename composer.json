@@ -1,4 +1,16 @@
 {
+    "name": "denisrpriebe/dynamicxml",
+    "description": "A tool for processing return address label orders.",
+    "type": "application",
+    "homepage": "https://github.com/denisrpriebe/Dynamic-XML",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Denis Priebe",
+            "email": "denisrpriebe@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
     "require": {
         "smarty/smarty": "~3.1"
     },
